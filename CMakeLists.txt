@@ -17,6 +17,7 @@ cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 # C++ as we _do_ have some C files to compile explicitely as C (e.g. gl3w.c)
 project(O2 LANGUAGES C CXX VERSION 1.2.0)
 
+
 include(CTest)
 
 # Project wide setup
