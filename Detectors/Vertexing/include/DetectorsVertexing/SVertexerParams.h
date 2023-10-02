@@ -33,9 +33,12 @@ struct SVertexerParams : public o2::conf::ConfigurableParamHelper<SVertexerParam
   bool createFullV0s = false;      ///< fill V0s prongs/kinematics
   bool createFullCascades = false; ///< fill cascades prongs/kinematics
   bool createFull3Bodies = false;  ///< fill 3-body decays prongs/kinematics
+  bool createFulldoubleHypeH4 = false;  ///< fill 3-body decays prongs/kinematics
 
   bool useAbsDCA = true;        ///< use abs dca minimization
   bool selectBestV0 = false;    ///< match only the best v0 for each cascade candidate
+  bool selectBest3body = false;    ///< match only the best v0 for each cascade candidate
+
   float maxChi2 = 2.;           ///< max dca from prongs to vertex
   float minParamChange = 1e-3;  ///< stop when tracks X-params being minimized change by less that this value
   float minRelChi2Change = 0.9; ///< stop when chi2 changes by less than this value

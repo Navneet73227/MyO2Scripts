@@ -76,6 +76,10 @@ class SVertexer
                AntiHyperhydrog4,
                NHypV0 };
 
+  enum DoubleHyp3B {DoubleHyperhydrogen4,
+                DoubleAntiHyperhydrogen4,
+                NDoubleHyp3B };
+
   enum HypCascade {
     XiMinus,
     OmegaMinus,
@@ -97,6 +101,7 @@ class SVertexer
     GIndex gid{};
     VBracket vBracket{};
     float minR = 0; // track lowest point r
+//    float TPC_dEdx =0;
   };
 
   SVertexer(bool enabCascades = true, bool enab3body = false) : mEnableCascades{enabCascades}, mEnable3BodyDecays{enab3body}
@@ -132,8 +137,14 @@ class SVertexer
  private:
   template <class TVI, class TCI, class T3I, class TR>
   void extractPVReferences(const TVI& v0s, TR& vtx2V0Refs, const TCI& cascades, TR& vtx2CascRefs, const T3I& vtxs3, TR& vtx2body3Refs);
+//  void extractPVReferences(const TVI& v0s, TR& vtx2V0Refs, const TCI& cascades, TR& vtx2CascRefs, const T3I& vtxs3, TR& vtx2body3Refs,  const TCI& doubleHypeH4, TR& vtx2DoubleHypeH4Refs);
+  int checkDoubleHypH4(const Decay3BodyIndex& body3Idx, const Decay3Body& body3, float rbody3, std::array<float, 3> p3body, float p23body, int avoidTrackID, int posneg, VBracket decay3vlist, int ithread);
   bool checkV0(const TrackCand& seed0, const TrackCand& seed1, int iP, int iN, int ithread);
   int checkCascades(const V0Index& v0Idx, const V0& v0, float rv0, std::array<float, 3> pV0, float p2V0, int avoidTrackID, int posneg, VBracket v0vlist, int ithread);
+
+//  int checkdoubleHypH4(float rv0, std::array<float, 3> pV0, float p2V0, int avoidTrackID, int posneg, VBracket v0vlist, int ithread);
+//  int checkdoubleHypH4(const Decay3BodyIndex& bodyIdx, const Decay3Body& body3, float r3body, std::array<float, 3> p3body, float p23body, int avoidTrackID, int posneg, VBracket v0vlist, int ithread);
+
   int check3bodyDecays(const V0Index& v0Idx, const V0& v0, float rv0, std::array<float, 3> pV0, float p2V0, int avoidTrackID, int posneg, VBracket v0vlist, int ithread);
   void setupThreads();
   void buildT2V(const o2::globaltracking::RecoContainer& recoTracks);
@@ -154,9 +165,13 @@ class SVertexer
   gsl::span<const PVertex> mPVertices;
   std::vector<std::vector<V0>> mV0sTmp;
   std::vector<std::vector<Cascade>> mCascadesTmp;
+  std::vector<std::vector<Cascade>> mDoubleHypH4Tmp;
+
   std::vector<std::vector<Decay3Body>> m3bodyTmp;
   std::vector<std::vector<V0Index>> mV0sIdxTmp;
   std::vector<std::vector<CascadeIndex>> mCascadesIdxTmp;
+  std::vector<std::vector<CascadeIndex>> mDoubleHyperH4IdxTmp; 
+
   std::vector<std::vector<Decay3BodyIndex>> m3bodyIdxTmp;
   std::array<std::vector<TrackCand>, 2> mTracksPool{}; // pools of positive and negative seeds sorted in min VtxID
   std::array<std::vector<int>, 2> mVtxFirstTrack{};    // 1st pos. and neg. track of the pools for each vertex
@@ -166,12 +181,16 @@ class SVertexer
   std::array<SVertexHypothesis, NHypV0> mV0Hyps;
   std::array<SVertexHypothesis, NHypCascade> mCascHyps;
   std::array<SVertex3Hypothesis, NHyp3body> m3bodyHyps;
+  std::array<SVertexHypothesis, NDoubleHyp3B> mDoubleHyps;
+
 
   std::vector<DCAFitterN<2>> mFitterV0;
   std::vector<DCAFitterN<2>> mFitterCasc;
+
+  std::vector<DCAFitterN<2>> mFitterdoubleHypH4;
   std::vector<DCAFitterN<3>> mFitter3body;
   int mNThreads = 1;
-  int mNV0s = 0, mNCascades = 0, mN3Bodies = 0, mNStrangeTracks = 0;
+  int mNV0s = 0, mNCascades = 0, mN3Bodies = 0, mNStrangeTracks = 0, mNDoubleHyperH4=0;
   float mMinR2ToMeanVertex = 0;
   float mMaxDCAXY2ToMeanVertex = 0;
   float mMaxDCAXY2ToMeanVertexV0Casc = 0;

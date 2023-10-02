@@ -26,6 +26,7 @@ namespace dataformats
 
 enum kPartType { kStrkV0,
                  kStrkCascade,
+                 kStrDoubleHypeH4,
                  kStrkThreeBody };
 
 struct StrangeTrack {
